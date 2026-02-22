@@ -1,13 +1,13 @@
 {
   "name": "@ansvar/polish-law-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "mcpName": "eu.ansvar/polish-law-mcp",
   "description": "Polish law database covering data protection (RODO/GDPR implementing provisions), national cybersecurity system (KSC), cybercrime (Kodeks karny), commercial companies (KSH), and e-services with Polish full-text search",
   "author": "Ansvar Systems <hello@ansvar.eu>",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Ansvar-Systems/polish-law-mcp.git"
+    "url": "git+https://github.com/Ansvar-Systems/polish-law-mcp.git"
   },
   "homepage": "https://ansvar.eu",
   "keywords": [

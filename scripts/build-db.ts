@@ -247,29 +247,69 @@ function dedupeProvisions(provisions: ProvisionSeed[]): ProvisionSeed[] {
   return Array.from(byRef.values());
 }
 
+/**
+ * Map Polish EU community abbreviations to standard form.
+ * Polish: UE=EU, WE=EC, EWG=EEC
+ */
+const COMMUNITY_MAP: Record<string, EUCommunity> = {
+  'EU': 'EU', 'UE': 'EU', 'EC': 'EC', 'WE': 'EC',
+  'EEC': 'EEC', 'EWG': 'EEC', 'Euratom': 'Euratom',
+};
+
+/**
+ * Determine EU document type from a matched keyword.
+ * Supports English and Polish terminology.
+ */
+function resolveEuType(keyword: string): EUDocumentType {
+  const lower = keyword.toLowerCase();
+  if (lower.startsWith('rozporz') || lower === 'regulation') return 'regulation';
+  return 'directive';
+}
+
 function extractEuReferences(text: string): ExtractedEUReference[] {
   if (!text || text.trim().length === 0) return [];
 
   const refs: ExtractedEUReference[] = [];
   const seen = new Set<string>();
 
-  const patterns: RegExp[] = [
+  // English patterns
+  const englishPatterns: RegExp[] = [
     /\b(Regulation|Directive)\s*\((EU|EC|EEC|Euratom)\)\s*(?:No\.?\s*)?(\d{2,4})\/(\d{1,4})\b/gi,
     /\b(Regulation|Directive)\s*(?:No\.?\s*)?(\d{2,4})\/(\d{1,4})\/(EU|EC|EEC|Euratom)\b/gi,
     /\b(Regulation|Directive)\s*(?:No\.?\s*)?(\d{2,4})\/(\d{1,4})\b/gi,
   ];
 
-  for (const pattern of patterns) {
+  // Polish patterns — rozporządzenie/rozporządzenia/rozporządzeniem = regulation
+  //                    dyrektywa/dyrektywy/dyrektywę/dyrektywą = directive
+  const polishPatterns: RegExp[] = [
+    // "rozporządzenia (UE) 2016/679" or "rozporządzeniem (WE) nr 2016/679"
+    /\b(rozporz[aą]dzeni[aeu]m?|dyrektywy?[ęą]?)\s*\((UE|WE|EWG|EU|EC|EEC|Euratom)\)\s*(?:nr\s*)?(\d{2,4})\/(\d{1,4})\b/gi,
+    // "rozporządzenia nr 2016/679/(UE)"
+    /\b(rozporz[aą]dzeni[aeu]m?|dyrektywy?[ęą]?)\s*(?:nr\s*)?(\d{2,4})\/(\d{1,4})\/(UE|WE|EWG|EU|EC|EEC|Euratom)\b/gi,
+    // "rozporządzenia nr 2016/679" without community
+    /\b(rozporz[aą]dzeni[aeu]m?|dyrektywy?[ęą]?)\s*(?:nr\s*)?(\d{2,4})\/(\d{1,4})\b/gi,
+    // "rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679"
+    /\b(rozporz[aą]dzeni[aeu]m?|dyrektywy?[ęą]?)\s+(?:Parlamentu\s+Europejskiego\s+(?:i|oraz)\s+Rady|Rady|Komisji)\s*\((UE|WE|EWG|EU|EC|EEC|Euratom)\)\s*(?:nr\s*)?(\d{2,4})\/(\d{1,4})\b/gi,
+  ];
+
+  const allPatterns = [...englishPatterns, ...polishPatterns];
+
+  for (const pattern of allPatterns) {
     let match: RegExpExecArray | null;
     while ((match = pattern.exec(text)) !== null) {
-      const type = match[1].toLowerCase() as EUDocumentType;
+      const typeKeyword = match[1];
+      const type = resolveEuType(typeKeyword);
       let rawYear: string, rawNumber: string, communityRaw: string | undefined;
 
-      if (pattern === patterns[0]) {
+      // Determine capture group positions based on pattern structure
+      if (pattern === englishPatterns[0] || pattern === polishPatterns[0] || pattern === polishPatterns[3]) {
+        // (type)(community)(year)(number)
         communityRaw = match[2]; rawYear = match[3]; rawNumber = match[4];
-      } else if (pattern === patterns[1]) {
+      } else if (pattern === englishPatterns[1] || pattern === polishPatterns[1]) {
+        // (type)(year)(number)(community)
         rawYear = match[2]; rawNumber = match[3]; communityRaw = match[4];
       } else {
+        // (type)(year)(number) — no community
         rawYear = match[2]; rawNumber = match[3]; communityRaw = undefined;
       }
 
@@ -278,14 +318,16 @@ function extractEuReferences(text: string): ExtractedEUReference[] {
       const number = Number.parseInt(rawNumber, 10);
       if (year <= 0 || Number.isNaN(number) || number <= 0) continue;
 
-      const community = (communityRaw?.toUpperCase() ?? 'EU') as EUCommunity;
+      const community = COMMUNITY_MAP[communityRaw?.toUpperCase() ?? 'EU'] ?? 'EU';
       const euDocumentId = `${type}:${year}/${number}`;
 
       const start = Math.max(0, match.index - 120);
       const end = Math.min(text.length, match.index + match[0].length + 120);
       const referenceContext = text.slice(start, end).replace(/\s+/g, ' ').trim();
-      const euArticle = referenceContext.match(/\bArticle\s+(\d+[A-Za-z]?(?:\(\d+\))?)/i)?.[1] ?? null;
-      const referenceType: EUReferenceType = /\b(implement|align|transpos|equivalent)\b/i.test(referenceContext) ? 'implements' : 'references';
+      // Match both English "Article" and Polish "art." patterns
+      const euArticle = referenceContext.match(/\b(?:Article|art\.?)\s+(\d+[A-Za-z]?(?:\(\d+\))?)/i)?.[1] ?? null;
+      // Polish implementation keywords: wdrożenie, transpozycja, wykonanie
+      const referenceType: EUReferenceType = /\b(implement|align|transpos|equivalent|wdro[żz]|transpoz|wykonan)/i.test(referenceContext) ? 'implements' : 'references';
 
       const dedupeKey = `${euDocumentId}:${euArticle ?? ''}`;
       if (seen.has(dedupeKey)) continue;

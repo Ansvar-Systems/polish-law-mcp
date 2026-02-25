@@ -37,36 +37,53 @@ export interface FetchResult {
 
 /**
  * Fetch a URL with rate limiting and proper headers.
- * Retries up to 3 times on 429/5xx errors with exponential backoff.
+ * Retries up to 3 times on 429/5xx/timeout errors with exponential backoff.
  */
-export async function fetchWithRateLimit(url: string, maxRetries = 3): Promise<FetchResult> {
+export async function fetchWithRateLimit(url: string, maxRetries = 3, timeoutMs = 30_000): Promise<FetchResult> {
   await rateLimit();
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': USER_AGENT,
-        'Accept': 'text/html, application/json, */*',
-      },
-      redirect: 'follow',
-    });
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
-    if (response.status === 429 || response.status >= 500) {
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': USER_AGENT,
+          'Accept': 'text/html, application/json, */*',
+        },
+        redirect: 'follow',
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeout);
+
+      if (response.status === 429 || response.status >= 500) {
+        if (attempt < maxRetries) {
+          const backoff = Math.pow(2, attempt + 1) * 1000;
+          console.log(`  HTTP ${response.status} for ${url}, retrying in ${backoff}ms...`);
+          await new Promise(resolve => setTimeout(resolve, backoff));
+          continue;
+        }
+      }
+
+      const body = await response.text();
+      return {
+        status: response.status,
+        body,
+        contentType: response.headers.get('content-type') ?? '',
+        url: response.url,
+      };
+    } catch (error) {
       if (attempt < maxRetries) {
         const backoff = Math.pow(2, attempt + 1) * 1000;
-        console.log(`  HTTP ${response.status} for ${url}, retrying in ${backoff}ms...`);
+        const msg = error instanceof Error ? error.message : String(error);
+        console.log(`  ${msg} for ${url}, retrying in ${backoff}ms (attempt ${attempt + 1}/${maxRetries})...`);
         await new Promise(resolve => setTimeout(resolve, backoff));
         continue;
       }
+      throw error;
     }
-
-    const body = await response.text();
-    return {
-      status: response.status,
-      body,
-      contentType: response.headers.get('content-type') ?? '',
-      url: response.url,
-    };
   }
 
   throw new Error(`Failed to fetch ${url} after ${maxRetries} retries`);

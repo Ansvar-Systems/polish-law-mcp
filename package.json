@@ -2,7 +2,7 @@
   "name": "@ansvar/polish-law-mcp",
   "version": "1.0.1",
   "mcpName": "eu.ansvar/polish-law-mcp",
-  "description": "Polish law database covering data protection (RODO/GDPR implementing provisions), national cybersecurity system (KSC), cybercrime (Kodeks karny), commercial companies (KSH), and e-services with Polish full-text search",
+  "description": "Complete Polish law database — 8,943 Acts (Ustawy), 161,705 provisions from the Sejm ELI API covering all parliamentary legislation published in Dziennik Ustaw (1918-2026) with Polish full-text search and EU cross-references",
   "author": "Ansvar Systems <hello@ansvar.eu>",
   "license": "Apache-2.0",
   "repository": {
@@ -47,6 +47,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "census": "node --import tsx scripts/census.ts",
     "ingest": "node --import tsx scripts/ingest.ts",
     "test:contract": "vitest run __tests__/contract/",
     "drift:detect": "node --import tsx scripts/drift-detect.ts",

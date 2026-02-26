@@ -1,16 +1,49 @@
-# Polish Law MCP
+# Polish Law MCP Server
+
+**The Sejm alternative for the AI age.**
 
 [![npm](https://img.shields.io/npm/v/@ansvar/polish-law-mcp)](https://www.npmjs.com/package/@ansvar/polish-law-mcp)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![CI](https://github.com/Ansvar-Systems/polish-law-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/Ansvar-Systems/polish-law-mcp/actions/workflows/ci.yml)
 [![MCP Registry](https://img.shields.io/badge/MCP-Registry-green)](https://registry.modelcontextprotocol.io/)
 [![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/Ansvar-Systems/polish-law-mcp)](https://securityscorecards.dev/viewer/?uri=github.com/Ansvar-Systems/polish-law-mcp)
+[![Database](https://img.shields.io/badge/database-pre--built-green)]()
+[![Provisions](https://img.shields.io/badge/provisions-161%2C705-blue)]()
 
-A Model Context Protocol (MCP) server providing comprehensive access to Polish legislation, including data protection (RODO/GDPR implementing provisions), national cybersecurity system (KSC), cybercrime (Kodeks karny), commercial companies (KSH), and e-services with Polish full-text search.
+Query **8,943 Polish laws** -- from the RODO implementing provisions and Kodeks karny to the KSC, Kodeks spolek handlowych, and more -- directly from Claude, Cursor, or any MCP-compatible client.
 
-**MCP Registry:** `eu.ansvar/polish-law-mcp`
-**npm:** `@ansvar/polish-law-mcp`
-**License:** Apache-2.0
+If you're building legal tech, compliance tools, or doing Polish legal research, this is your verified reference database.
+
+Built by [Ansvar Systems](https://ansvar.eu) -- Stockholm, Sweden
+
+---
+
+## Why This Exists
+
+Polish legal research is scattered across ISAP (Internetowy System Aktow Prawnych), the Dziennik Ustaw, and commercial platforms. Whether you're:
+- A **lawyer** validating citations in a brief or contract under Polish law
+- A **compliance officer** checking RODO/GDPR implementing provisions or KSC obligations
+- A **legal tech developer** building tools on Polish legislation
+- A **researcher** tracing legislative history through the Dziennik Ustaw
+
+...you shouldn't need dozens of browser tabs and manual PDF cross-referencing. Ask Claude. Get the exact provision. With context.
+
+This MCP server makes Polish law **searchable, cross-referenceable, and AI-readable**.
+
+---
+
+## Example Queries
+
+Once connected, just ask naturally:
+
+- *"Co mowi RODO o zgodzie na przetwarzanie danych?"*
+- *"Znajdz przepisy o ochronie danych osobowych w polskim prawie"*
+- *"What does the KSC say about incident reporting?"*
+- *"Find cybercrime provisions in the Kodeks karny (Art. 267-269b)"*
+- *"Is the Kodeks spolek handlowych still in force?"*
+- *"What EU directives does the DPA 2018 implement?"*
+- *"Validate this legal citation"*
+- *"Build a legal stance on data breach notification requirements in Poland"*
 
 ---
 
@@ -39,7 +72,55 @@ The full database is larger due to the comprehensive scope of Polish legislation
 
 ## Quick Start
 
-### Claude Desktop / Cursor (stdio)
+### Use Remotely (No Install Needed)
+
+> Connect directly to the hosted version -- zero dependencies, nothing to install.
+
+**Endpoint:** `https://polish-law-mcp.vercel.app/mcp`
+
+| Client | How to Connect |
+|--------|---------------|
+| **Claude.ai** | Settings > Connectors > Add Integration > paste URL |
+| **Claude Code** | `claude mcp add polish-law --transport http https://polish-law-mcp.vercel.app/mcp` |
+| **Claude Desktop** | Add to config (see below) |
+| **GitHub Copilot** | Add to VS Code settings (see below) |
+
+**Claude Desktop** -- add to `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "polish-law": {
+      "type": "url",
+      "url": "https://polish-law-mcp.vercel.app/mcp"
+    }
+  }
+}
+```
+
+**GitHub Copilot** -- add to VS Code `settings.json`:
+
+```json
+{
+  "github.copilot.chat.mcp.servers": {
+    "polish-law": {
+      "type": "http",
+      "url": "https://polish-law-mcp.vercel.app/mcp"
+    }
+  }
+}
+```
+
+### Use Locally (npm)
+
+```bash
+npx @ansvar/polish-law-mcp
+```
+
+**Claude Desktop** -- add to `claude_desktop_config.json`:
+
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
@@ -52,12 +133,17 @@ The full database is larger due to the comprehensive scope of Polish legislation
 }
 ```
 
-### Vercel Streamable HTTP (ChatGPT / Claude.ai)
+**Cursor / VS Code:**
 
-Once deployed, the public endpoint will be available at:
-
-```
-https://polish-law-mcp.vercel.app/api/mcp
+```json
+{
+  "mcp.servers": {
+    "polish-law": {
+      "command": "npx",
+      "args": ["-y", "@ansvar/polish-law-mcp"]
+    }
+  }
+}
 ```
 
 ---

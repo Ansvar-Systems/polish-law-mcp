@@ -1,5 +1,5 @@
 /**
- * Response metadata utilities for Australian Law MCP.
+ * Response metadata utilities for Polish Law MCP.
  */
 
 import type Database from '@ansvar/mcp-sqlite';
@@ -30,12 +30,10 @@ export function generateResponseMetadata(
   }
 
   return {
-    data_source: 'Federal Register of Legislation (legislation.gov.au) — Australian Government, Office of Parliamentary Counsel',
-    jurisdiction: 'AU',
+    data_source: 'Internetowy System Aktów Prawnych (isap.sejm.gov.pl) — Polish Sejm',
+    jurisdiction: 'PL',
     disclaimer:
-      'This data is sourced from the Federal Register of Legislation under CC BY 4.0 licence. ' +
-      'The authoritative versions are maintained by the Australian Government. ' +
-      'Always verify with the official Federal Register of Legislation portal (legislation.gov.au).',
+      'This data is sourced from ISAP, the Polish Sejm Internet System of Legal Acts. The authoritative versions are maintained by the Polish Parliament (Sejm). Always verify with the official ISAP portal (isap.sejm.gov.pl).',
     freshness,
   };
 }

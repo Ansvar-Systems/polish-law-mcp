@@ -1,16 +1,17 @@
 # Polish Law MCP Server
 
-**The Sejm alternative for the AI age.**
+**The ISAP (Internetowy System Aktów Prawnych) alternative for the AI age.**
 
-[![npm](https://img.shields.io/npm/v/@ansvar/polish-law-mcp)](https://www.npmjs.com/package/@ansvar/polish-law-mcp)
-[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![npm version](https://badge.fury.io/js/@ansvar%2Fpolish-law-mcp.svg)](https://www.npmjs.com/package/@ansvar/polish-law-mcp)
+[![MCP Registry](https://img.shields.io/badge/MCP-Registry-blue)](https://registry.modelcontextprotocol.io)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![GitHub stars](https://img.shields.io/github/stars/Ansvar-Systems/polish-law-mcp?style=social)](https://github.com/Ansvar-Systems/polish-law-mcp)
 [![CI](https://github.com/Ansvar-Systems/polish-law-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/Ansvar-Systems/polish-law-mcp/actions/workflows/ci.yml)
-[![MCP Registry](https://img.shields.io/badge/MCP-Registry-green)](https://registry.modelcontextprotocol.io/)
-[![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/Ansvar-Systems/polish-law-mcp)](https://securityscorecards.dev/viewer/?uri=github.com/Ansvar-Systems/polish-law-mcp)
-[![Database](https://img.shields.io/badge/database-pre--built-green)]()
-[![Provisions](https://img.shields.io/badge/provisions-161%2C705-blue)]()
+[![Daily Data Check](https://github.com/Ansvar-Systems/polish-law-mcp/actions/workflows/check-updates.yml/badge.svg)](https://github.com/Ansvar-Systems/polish-law-mcp/actions/workflows/check-updates.yml)
+[![Database](https://img.shields.io/badge/database-pre--built-green)](docs/EU_INTEGRATION_GUIDE.md)
+[![Provisions](https://img.shields.io/badge/provisions-161%2C705-blue)](docs/EU_INTEGRATION_GUIDE.md)
 
-Query **8,943 Polish laws** -- from the RODO implementing provisions and Kodeks karny to the KSC, Kodeks spolek handlowych, and more -- directly from Claude, Cursor, or any MCP-compatible client.
+Query **8,943 Polish statutes** -- from Ustawa o ochronie danych osobowych (UODO/RODO) and Kodeks karny to Kodeks cywilny, Kodeks spółek handlowych, Kodeks pracy, and more -- directly from Claude, Cursor, or any MCP-compatible client.
 
 If you're building legal tech, compliance tools, or doing Polish legal research, this is your verified reference database.
 
@@ -20,53 +21,15 @@ Built by [Ansvar Systems](https://ansvar.eu) -- Stockholm, Sweden
 
 ## Why This Exists
 
-Polish legal research is scattered across ISAP (Internetowy System Aktow Prawnych), the Dziennik Ustaw, and commercial platforms. Whether you're:
-- A **lawyer** validating citations in a brief or contract under Polish law
-- A **compliance officer** checking RODO/GDPR implementing provisions or KSC obligations
-- A **legal tech developer** building tools on Polish legislation
-- A **researcher** tracing legislative history through the Dziennik Ustaw
+Polish legal research means navigating ISAP (Sejm), the Dziennik Ustaw, and EUR-Lex, then manually reconciling between national statutes and EU directives. Whether you're:
+- A **lawyer** validating citations in a brief or contract
+- A **compliance officer** checking UODO (RODO) obligations or KSC requirements
+- A **legal tech developer** building tools on Polish law
+- A **researcher** tracing legislative provisions published in Dziennik Ustaw from 1918 to 2026
 
-...you shouldn't need dozens of browser tabs and manual PDF cross-referencing. Ask Claude. Get the exact provision. With context.
+...you shouldn't need dozens of browser tabs and manual cross-referencing. Ask Claude. Get the exact provision. With context.
 
 This MCP server makes Polish law **searchable, cross-referenceable, and AI-readable**.
-
----
-
-## Example Queries
-
-Once connected, just ask naturally:
-
-- *"Co mowi RODO o zgodzie na przetwarzanie danych?"*
-- *"Znajdz przepisy o ochronie danych osobowych w polskim prawie"*
-- *"What does the KSC say about incident reporting?"*
-- *"Find cybercrime provisions in the Kodeks karny (Art. 267-269b)"*
-- *"Is the Kodeks spolek handlowych still in force?"*
-- *"What EU directives does the DPA 2018 implement?"*
-- *"Validate this legal citation"*
-- *"Build a legal stance on data breach notification requirements in Poland"*
-
----
-
-## Deployment Tier
-
-**MEDIUM** -- dual tier, free database bundled in npm package.
-
-| Tier | Platform | Database | Content |
-|------|----------|----------|---------|
-| **Free** | Vercel (Hobby) / npm (stdio) | Core legislation (~100-180 MB) | Key laws (DPA 2018, KSC, Kodeks karny cybercrime, KSH, e-Services Act, Telecommunications Law), FTS search, EU cross-references |
-| **Professional** | Azure Container Apps / Docker / Local | Full database (~500 MB - 900 MB) | + All ustawy and rozporzadzenia, UODO decisions and guidance, Supreme Court/Constitutional Tribunal summaries, NIS2 transposition materials |
-
-The full database is larger due to the comprehensive scope of Polish legislation and supplementary regulatory materials. The free tier contains all key data protection, cybersecurity, cybercrime, commercial, and e-services legislation from ISAP.
-
----
-
-## Data Sources
-
-| Source | Authority | Method | Update Frequency | License | Coverage |
-|--------|-----------|--------|-----------------|---------|----------|
-| [ISAP](https://isap.sejm.gov.pl) | Kancelaria Sejmu RP (Chancellery of the Sejm) | HTML Scrape / API | Weekly | Government Open Data (public domain per Art. 4 Copyright Act) | All Polish legislation published in Dziennik Ustaw and Monitor Polski |
-
-> Full provenance metadata: [`sources.yml`](./sources.yml)
 
 ---
 
@@ -148,193 +111,335 @@ npx @ansvar/polish-law-mcp
 
 ---
 
-## Tools
+## Example Queries
 
-| Tool | Description | Free Tier | Professional |
-|------|-------------|-----------|-------------|
-| `get_provision` | Retrieve a specific article from a Polish law or code | Yes | Yes |
-| `search_legislation` | Full-text search across all Polish legislation (Polish) | Yes | Yes |
-| `list_laws` | List all available laws with metadata | Yes | Yes |
-| `get_law_structure` | Get table of contents / structure of a law or code | Yes | Yes |
-| `get_provision_eu_basis` | Cross-reference Polish law to EU directives/regulations | Yes | Yes |
-| `search_rozporzadzenia` | Search rozporzadzenia (regulations) and executive instruments | No (upgrade) | Yes |
-| `get_uodo_guidance` | Retrieve UODO decisions and guidance | No (upgrade) | Yes |
+Once connected, just ask naturally:
 
----
-
-## Key Legislation Covered
-
-| Law | Identifier | Domain | Key Topics |
-|-----|-----------|--------|------------|
-| **DPA 2018** | Ustawa o ochronie danych osobowych (Dz.U. 2018 poz. 1000) | Data Protection | GDPR/RODO implementing provisions, UODO structure and powers, administrative procedures, certification |
-| **KSC** | Ustawa o krajowym systemie cyberbezpieczenstwa (Dz.U. 2018 poz. 1560) | Cybersecurity | National cybersecurity system, CSIRT teams, incident reporting, essential services operators, NIS implementation |
-| **Kodeks karny (cybercrime)** | Art. 267-269b | Cybercrime | Unauthorized access (267), data destruction (268), system sabotage (268a), critical system sabotage (269), hacking tools (269b) |
-| **KSH** | Kodeks spolek handlowych (Dz.U. 2000 nr 94 poz. 1037) | Company Law | Sp. z o.o. and S.A. companies, partnerships, corporate governance, shareholders' rights |
-| **e-Services Act** | Ustawa o swiadczeniu uslug droga elektroniczna (Dz.U. 2002 nr 144 poz. 1204) | e-Commerce | Electronic service providers, hosting liability, commercial communications, consumer information |
-| **Telecommunications Law** | Prawo telekomunikacyjne (Dz.U. 2004 nr 171 poz. 1800) | Telecommunications | Telecom regulation, UKE authority, licensing, data retention, lawful interception |
+- *"Co mówi art. 5 Ustawy o ochronie danych osobowych (UODO) o zasadach przetwarzania danych?"*
+- *"Wyszukaj 'ochrona danych osobowych' w polskim prawie (UODO/RODO)"*
+- *"Jakie przepisy Kodeksu karnego dotyczą przestępstw komputerowych?"*
+- *"Znajdź artykuły o wypowiedzeniu umowy o pracę w Kodeksie pracy"*
+- *"What EU directives does the Polish Ustawa o krajowym systemie cyberbezpieczeństwa (KSC) implement?"*
+- *"Which Polish laws implement the NIS2 Directive?"*
+- *"Sprawdź, czy Ustawa Dz.U. 2018 poz. 1000 jest nadal w mocy"*
+- *"Wyszukaj 'odpowiedzialność cywilna' w Kodeksie cywilnym"*
+- *"Compare NIS2 incident reporting requirements with the Polish KSC transposition"*
+- *"Znajdź orzeczenia sądowe dotyczące RODO z 2023 roku (premium)"*
 
 ---
 
-## Database Estimates
+## What's Included
 
-| Component | Free Tier | Full (Professional) |
-|-----------|-----------|---------------------|
-| Core codes and key laws | ~70-130 MB | ~70-130 MB |
-| All ustawy and rozporzadzenia | -- | ~300-500 MB |
-| UODO decisions and guidance | -- | ~50-100 MB |
-| Case law summaries | -- | ~70-150 MB |
-| Cross-references and metadata | ~5 MB | ~15 MB |
-| **Total** | **~100-180 MB** | **~500 MB - 900 MB** |
+| Category | Count | Details |
+|----------|-------|---------|
+| **Statutes (Ustawy)** | 8,943 acts | Dziennik Ustaw publications 1918-2026 from Sejm ELI API |
+| **Provisions** | 161,705 articles | Full-text searchable with FTS5 |
+| **Case Law** | 23,043 decisions | Premium tier -- judicial decisions |
+| **Preparatory Works** | 43,312 documents | Premium tier -- druki sejmowe, rządowe projekty ustaw |
+| **Agency Guidance** | 10 documents | Premium tier -- UODO guidance |
+| **Database Size** | ~332 MB | Optimized SQLite, portable |
+| **Daily Updates** | Automated | Freshness checks against Sejm ELI API |
 
-**Delivery strategy:** Free-tier DB bundled in npm package (Strategy A -- fits within Vercel 250 MB function limit). If final size exceeds 250 MB after ingestion, switch to Strategy B (runtime download from GitHub Releases).
-
----
-
-## Regulatory Context
-
-- **Supervisory Authority:** UODO (Urzad Ochrony Danych Osobowych - Personal Data Protection Office) with growing enforcement activity
-- **RODO** is the Polish name for GDPR (Rozporzadzenie o Ochronie Danych Osobowych); the DPA 2018 provides national implementing provisions
-- **KSC** established Poland's national cybersecurity system with three CSIRT teams: CSIRT NASK (private sector), CSIRT GOV (government), CSIRT MON (military)
-- **NASK** (Naukowa i Akademicka Siec Komputerowa) operates the national cybersecurity research center
-- Polish legal texts are **explicitly excluded from copyright** under Art. 4 of the Copyright Act, ensuring free reuse
-- **Dziennik Ustaw** (Journal of Laws) is the sole authoritative publication vehicle for Polish legislation
-- Poland is the **EU's sixth largest economy** and the largest in Central and Eastern Europe
-- NIS2 transposition is expected to expand KSC significantly with new entity categories and reporting obligations
+**Verified data only** -- every citation is validated against official sources (api.sejm.gov.pl, isap.sejm.gov.pl). Zero LLM-generated content.
 
 ---
 
-## Development
+## See It In Action
 
-```bash
-# Clone the repository
-git clone https://github.com/Ansvar-Systems/polish-law-mcp.git
-cd polish-law-mcp
+### Why This Works
 
-# Install dependencies
-npm install
+**Verbatim Source Text (No LLM Processing):**
+- All statute text is ingested from the Sejm ELI API (api.sejm.gov.pl) covering all Dziennik Ustaw publications
+- Provisions are returned **unchanged** from SQLite FTS5 database rows
+- Zero LLM summarization or paraphrasing -- the database contains regulation text, not AI interpretations
 
-# Build
-npm run build
+**Smart Context Management:**
+- Search returns ranked provisions with BM25 scoring (safe for context)
+- Provision retrieval gives exact text by Dz.U. year/position + article number
+- Cross-references help navigate without loading everything at once
 
-# Run tests
-npm test
-
-# Run contract tests
-npm run test:contract
-
-# Build database (requires raw data in data/ directory)
-npm run build:db
-
-# Build free-tier database
-npm run build:db:free
-
-# Run drift detection
-npm run drift:detect
-
-# Full validation
-npm run validate
+**Technical Architecture:**
+```
+Sejm ELI API (api.sejm.gov.pl) --> Parse --> SQLite --> FTS5 snippet() --> MCP response
+                                     ^                        ^
+                              Provision parser         Verbatim database query
 ```
 
----
+### Traditional Research vs. This MCP
 
-## Architecture
+| Traditional Approach | This MCP Server |
+|---------------------|-----------------|
+| Search ISAP by act name | Search by plain Polish: *"ochrona danych osobowych"* |
+| Navigate multi-chapter acts manually | Get the exact provision with context |
+| Manual cross-referencing between acts | `build_legal_stance` aggregates across sources |
+| "Czy ta ustawa jest w mocy?" -> check manually | `check_currency` tool -> answer in seconds |
+| Find EU basis -> dig through EUR-Lex | `get_eu_basis` -> linked EU directives instantly |
+| Check ISAP, Dziennik Ustaw, EUR-Lex separately | Daily automated freshness checks |
+| No API, no integration | MCP protocol -> AI-native |
 
-```
-polish-law-mcp/
-├── .github/
-│   ├── workflows/
-│   │   ├── ci.yml                    # Test + lint + security scan
-│   │   ├── publish.yml               # npm publish on version tags
-│   │   ├── check-source-updates.yml  # Data freshness monitoring
-│   │   └── drift-detect.yml          # Upstream drift detection
-│   ├── SECURITY.md
-│   ├── SECURITY-SETUP.md
-│   └── ISSUE_TEMPLATE/
-│       └── data-error.md
-├── data/
-│   └── .gitkeep
-├── fixtures/
-│   ├── golden-tests.json             # 12 contract tests
-│   ├── golden-hashes.json            # 6 drift detection anchors
-│   └── README.md
-├── scripts/
-│   ├── build-db.ts
-│   ├── build-db-free.ts
-│   ├── download-free-db.sh
-│   ├── ingest.ts
-│   ├── drift-detect.ts
-│   └── check-source-updates.ts
-├── src/
-│   ├── server.ts
-│   ├── db.ts
-│   └── tools/
-│       ├── get-provision.ts
-│       ├── search-legislation.ts
-│       ├── list-laws.ts
-│       ├── get-law-structure.ts
-│       ├── get-provision-eu-basis.ts
-│       ├── search-rozporzadzenia.ts
-│       └── get-uodo-guidance.ts
-├── __tests__/
-│   ├── unit/
-│   ├── contract/
-│   │   └── golden.test.ts
-│   └── integration/
-├── sources.yml
-├── server.json
-├── package.json
-├── tsconfig.json
-├── vercel.json
-├── CHANGELOG.md
-├── LICENSE
-└── README.md
-```
+**Traditional:** Search ISAP -> Download PDF -> Ctrl+F -> Cross-reference with RODO -> Check EUR-Lex -> Repeat
+
+**This MCP:** *"Jakie unijne przepisy stanowią podstawę art. 22 UODO o zautomatyzowanym podejmowaniu decyzji?"* -> Done.
 
 ---
 
-## Notes on Polish Data Protection Landscape
+## Available Tools (13)
 
-**RODO (GDPR)** and the **DPA 2018** have distinctive Polish implementation features:
+### Core Legal Research Tools (8)
 
-- Poland's DPA 2018 focuses on **UODO structure and procedures** rather than substantive data protection rules (which come directly from GDPR/RODO)
-- **UODO** has been growing in enforcement activity, with increasing fine amounts
-- Poland maintains **sector-specific data protection provisions** in telecommunications and health legislation
-- **Age of digital consent** set at 16 (GDPR default)
+| Tool | Description |
+|------|-------------|
+| `search_legislation` | FTS5 full-text search across 161,705 provisions with BM25 ranking |
+| `get_provision` | Retrieve specific provision by Dz.U. identifier + article number |
+| `validate_citation` | Validate citation against database (zero-hallucination check) |
+| `build_legal_stance` | Aggregate citations from statutes, case law, preparatory works |
+| `format_citation` | Format citations per Polish conventions (full/short/pinpoint) |
+| `check_currency` | Check if statute is in force, amended, or repealed |
+| `list_sources` | List all available statutes with metadata and data provenance |
+| `about` | Server info, capabilities, dataset statistics, and coverage summary |
 
-**KSC** (National Cybersecurity System) is comprehensive:
-- Three-CSIRT model: **CSIRT NASK** (private sector), **CSIRT GOV** (government), **CSIRT MON** (military)
-- **Essential services operators** must implement security measures and report incidents
-- **Digital service providers** have separate obligations
-- NIS2 transposition will significantly expand the scope and requirements
+### EU Law Integration Tools (5)
 
-**Kodeks karny** cybercrime provisions (Arts. 267-269b) cover:
-- Art. 267: Unauthorized access to information
-- Art. 268: Destruction or alteration of data
-- Art. 268a: Disruption of automated data processing
-- Art. 269: Sabotage of computer systems of particular importance
-- Art. 269b: Manufacturing or possession of hacking tools
-
-Poland is the **largest economy in Central and Eastern Europe** and a key market for EU-wide compliance programs.
+| Tool | Description |
+|------|-------------|
+| `get_eu_basis` | Get EU directives/regulations underlying a Polish statute |
+| `get_polish_implementations` | Find Polish laws implementing a specific EU act |
+| `search_eu_implementations` | Search EU documents with Polish implementation counts |
+| `get_provision_eu_basis` | Get EU law references for a specific provision |
+| `validate_eu_compliance` | Check implementation status against EU directives |
 
 ---
 
-## Related Documents
+## EU Law Integration
 
-- [MCP Quality Standard](../../mcp-quality-standard.md) -- quality requirements for all Ansvar MCPs
-- [MCP Infrastructure Blueprint](../../mcp-infrastructure-blueprint.md) -- infrastructure implementation templates
-- [MCP Deployment Tiers](../../mcp-deployment-tiers.md) -- free vs. professional tier strategy
-- [MCP Server Registry](../../mcp-server-registry.md) -- operational registry of all MCPs
-- [MCP Remote Access](../../mcp-remote-access.md) -- public Vercel endpoint URLs
+Poland is a full EU member state (accession 2004). Polish law has systematic EU cross-references across data protection, cybersecurity, financial regulation, and labour law.
+
+| Metric | Value |
+|--------|-------|
+| **EU Integration** | Full EU member (accession 2004) |
+| **GDPR Implementation** | UODO -- Ustawa o ochronie danych osobowych (2018, UODO oversight) |
+| **NIS2 Transposition** | Ustawa o krajowym systemie cyberbezpieczeństwa (KSC, update pending) |
+| **AI Act** | Direct application (EU regulation, no transposition needed) |
+| **EUR-Lex Integration** | Automated metadata fetching |
+
+### Key EU Acts with Polish Implementations
+
+1. **GDPR** (2016/679) -- UODO (Ustawa z dnia 10 maja 2018 r. o ochronie danych osobowych)
+2. **NIS2 Directive** (2022/2555) -- Ustawa o KSC (amendment in progress as of 2026)
+3. **eIDAS Regulation** (910/2014) -- Ustawa o usługach zaufania (2016)
+4. **AI Act** (2024/1689) -- Direct application
+5. **DORA** (2022/2554) -- Direct application in financial sector
+
+See [EU_INTEGRATION_GUIDE.md](docs/EU_INTEGRATION_GUIDE.md) for detailed documentation and [EU_USAGE_EXAMPLES.md](docs/EU_USAGE_EXAMPLES.md) for practical examples.
+
+---
+
+## Data Sources & Freshness
+
+All content is sourced from authoritative Polish legal databases:
+
+- **[Sejm ELI API](https://api.sejm.gov.pl/)** -- Official Polish Parliament legislative database (European Legislation Identifier)
+- **[ISAP](https://isap.sejm.gov.pl/)** -- Internetowy System Aktów Prawnych
+- **[EUR-Lex](https://eur-lex.europa.eu/)** -- Official EU law database (metadata only)
+
+### Data Provenance
+
+| Field | Value |
+|-------|-------|
+| **Authority** | Kancelaria Sejmu RP (Polish Parliament Chancellery) |
+| **Retrieval method** | Sejm ELI REST API (api.sejm.gov.pl) |
+| **Languages** | Polish (official language of law) |
+| **License** | Public domain (Sejm ELI open data) |
+| **Coverage** | 8,943 acts published in Dziennik Ustaw (1918-2026) |
+| **Last ingested** | 2026-02-25 |
+
+### Automated Freshness Checks (Daily)
+
+A [daily GitHub Actions workflow](.github/workflows/check-updates.yml) monitors all data sources:
+
+| Source | Check | Method |
+|--------|-------|--------|
+| **Statute amendments** | Sejm ELI API date comparison | All 8,943 acts checked |
+| **New statutes** | Dziennik Ustaw publications (90-day window) | Diffed against database |
+| **Preparatory works** | Sejm druki API (30-day window) | New texts detected |
+| **EU reference staleness** | Git commit timestamps | Flagged if >90 days old |
 
 ---
 
 ## Security
 
-Report vulnerabilities to **security@ansvar.eu** (48-hour acknowledgment SLA).
+This project uses multiple layers of automated security scanning:
 
-See [SECURITY.md](.github/SECURITY.md) for full disclosure policy.
+| Scanner | What It Does | Schedule |
+|---------|-------------|----------|
+| **CodeQL** | Static analysis for security vulnerabilities | Weekly + PRs |
+| **Semgrep** | SAST scanning (OWASP top 10, secrets, TypeScript) | Every push |
+| **Gitleaks** | Secret detection across git history | Every push |
+| **Trivy** | CVE scanning on filesystem and npm dependencies | Daily |
+| **Docker Security** | Container image scanning + SBOM generation | Daily |
+| **Socket.dev** | Supply chain attack detection | PRs |
+| **OSSF Scorecard** | OpenSSF best practices scoring | Weekly |
+| **Dependabot** | Automated dependency updates | Weekly |
+
+See [SECURITY.md](SECURITY.md) for the full policy and vulnerability reporting.
 
 ---
 
-**Maintained by:** Ansvar Systems Engineering
-**Contact:** hello@ansvar.eu
+## Important Disclaimers
+
+### Legal Advice
+
+> **THIS TOOL IS NOT LEGAL ADVICE**
+>
+> Statute text is sourced from official Sejm ELI API (Dziennik Ustaw) publications. However:
+> - This is a **research tool**, not a substitute for professional legal counsel
+> - **Court case coverage is limited** (premium tier) -- do not rely solely on this for case law research
+> - **Verify critical citations** against primary sources for court filings
+> - **EU cross-references** are extracted from Polish statute text, not EUR-Lex full text
+> - **Regulatory guidance** (UODO decisions) has limited coverage in the free tier
+
+**Before using professionally, read:** [DISCLAIMER.md](DISCLAIMER.md) | [PRIVACY.md](PRIVACY.md)
+
+### Client Confidentiality
+
+Queries go through the Claude API. For privileged or confidential matters, use on-premise deployment. For guidance on professional obligations, consult the Naczelna Rada Adwokacka (Polish Bar Council). See [PRIVACY.md](PRIVACY.md) for compliance guidance.
+
+---
+
+## Documentation
+
+- **[EU Integration Guide](docs/EU_INTEGRATION_GUIDE.md)** -- Detailed EU cross-reference documentation
+- **[EU Usage Examples](docs/EU_USAGE_EXAMPLES.md)** -- Practical EU lookup examples
+- **[Security Policy](SECURITY.md)** -- Vulnerability reporting and scanning details
+- **[Disclaimer](DISCLAIMER.md)** -- Legal disclaimers and professional use notices
+- **[Privacy](PRIVACY.md)** -- Client confidentiality and data handling
+
+---
+
+## Development
+
+### Setup
+
+```bash
+git clone https://github.com/Ansvar-Systems/polish-law-mcp
+cd polish-law-mcp
+npm install
+npm run build
+npm test
+```
+
+### Running Locally
+
+```bash
+npm run dev                                       # Start MCP server
+npx @anthropic/mcp-inspector node dist/index.js   # Test with MCP Inspector
+```
+
+### Data Management
+
+```bash
+npm run ingest                    # Ingest statutes from Sejm ELI API
+npm run build:db                  # Rebuild SQLite database
+npm run drift:detect              # Run drift detection against anchors
+npm run check-updates             # Check for amendments and new statutes
+npm run census                    # Generate coverage census report
+```
+
+### Performance
+
+- **Search Speed:** <100ms for most FTS5 queries
+- **Database Size:** ~332 MB (efficient, portable)
+- **Reliability:** 100% ingestion success rate across 8,943 acts
+
+---
+
+## Related Projects: Complete Compliance Suite
+
+This server is part of **Ansvar's Compliance Suite** -- MCP servers that work together for end-to-end compliance coverage:
+
+### [@ansvar/eu-regulations-mcp](https://github.com/Ansvar-Systems/EU_compliance_MCP)
+**Query 49 EU regulations directly from Claude** -- GDPR, AI Act, DORA, NIS2, MiFID II, eIDAS, and more. Full regulatory text with article-level search. `npx @ansvar/eu-regulations-mcp`
+
+### @ansvar/polish-law-mcp (This Project)
+**Query 8,943 Polish statutes directly from Claude** -- UODO, Kodeks karny, Kodeks cywilny, Kodeks pracy, KSC, and more. Full provision text with EU cross-references. `npx @ansvar/polish-law-mcp`
+
+### [@ansvar/french-law-mcp](https://github.com/Ansvar-Systems/France-law-mcp)
+**Query 3,958 French statutes** -- Code civil, Code pénal, loi Informatique et Libertés, and more. `npx @ansvar/french-law-mcp`
+
+### [@ansvar/security-controls-mcp](https://github.com/Ansvar-Systems/security-controls-mcp)
+**Query 261 security frameworks** -- ISO 27001, NIST CSF, SOC 2, CIS Controls, SCF, and more. `npx @ansvar/security-controls-mcp`
+
+### [@ansvar/sanctions-mcp](https://github.com/Ansvar-Systems/Sanctions-MCP)
+**Offline-capable sanctions screening** -- OFAC, EU, UN sanctions lists. `pip install ansvar-sanctions-mcp`
+
+---
+
+## Contributing
+
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+Priority areas:
+- Court case law expansion (Sąd Najwyższy, Naczelny Sąd Administracyjny)
+- UODO decisions and guidance ingestion
+- Historical statute versions and amendment tracking
+- EU implementation gap analysis for NIS2 KSC update
+
+---
+
+## Roadmap
+
+- [x] Core statute database with FTS5 search
+- [x] Full corpus ingestion (8,943 acts, 161,705 provisions) from Dziennik Ustaw 1918-2026
+- [x] EU law integration tools
+- [x] Vercel Streamable HTTP deployment
+- [x] npm package publication
+- [x] Premium case law (23,043 decisions)
+- [x] Premium preparatory works (43,312 documents)
+- [x] Premium agency guidance (10 UODO documents)
+- [ ] Sąd Najwyższy full case law coverage
+- [ ] UODO guidance documents expansion
+- [ ] Historical statute versions (amendment tracking)
+- [ ] NIS2 KSC amendment tracking
+
+---
+
+## Citation
+
+If you use this MCP server in academic research:
+
+```bibtex
+@software{polish_law_mcp_2026,
+  author = {Ansvar Systems AB},
+  title = {Polish Law MCP Server: Production-Grade Legal Research Tool},
+  year = {2026},
+  url = {https://github.com/Ansvar-Systems/polish-law-mcp},
+  note = {8,943 Polish acts with 161,705 provisions from Dziennik Ustaw (1918-2026) and EU law cross-references}
+}
+```
+
+---
+
+## License
+
+Apache License 2.0. See [LICENSE](./LICENSE) for details.
+
+### Data Licenses
+
+- **Statutes & Legislation:** Kancelaria Sejmu RP (public domain -- Sejm ELI open data)
+- **EU Metadata:** EUR-Lex (EU public domain)
+
+---
+
+## About Ansvar Systems
+
+We build AI-accelerated compliance and legal research tools for the European market. This MCP server started as our internal reference tool for Polish law -- turns out everyone building for the Polish and EU markets has the same research frustrations.
+
+So we're open-sourcing it. Navigating 8,943 acts in the Dziennik Ustaw shouldn't require a law degree.
+
+**[ansvar.eu](https://ansvar.eu)** -- Stockholm, Sweden
+
+---
+
+<p align="center">
+  <sub>Built with care in Stockholm, Sweden</sub>
+</p>

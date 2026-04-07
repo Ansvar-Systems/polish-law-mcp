@@ -39,12 +39,12 @@ This MCP server makes Polish law **searchable, cross-referenceable, and AI-reada
 
 > Connect directly to the hosted version -- zero dependencies, nothing to install.
 
-**Endpoint:** `https://mcp.ansvar.eu/law-polish-law-mcp/mcp`
+**Endpoint:** `https://mcp.ansvar.eu/law-pl/mcp`
 
 | Client | How to Connect |
 |--------|---------------|
 | **Claude.ai** | Settings > Connectors > Add Integration > paste URL |
-| **Claude Code** | `claude mcp add polish-law --transport http https://mcp.ansvar.eu/law-polish-law-mcp/mcp` |
+| **Claude Code** | `claude mcp add polish-law --transport http https://mcp.ansvar.eu/law-pl/mcp` |
 | **Claude Desktop** | Add to config (see below) |
 | **GitHub Copilot** | Add to VS Code settings (see below) |
 
@@ -55,7 +55,7 @@ This MCP server makes Polish law **searchable, cross-referenceable, and AI-reada
   "mcpServers": {
     "polish-law": {
       "type": "url",
-      "url": "https://mcp.ansvar.eu/law-polish-law-mcp/mcp"
+      "url": "https://mcp.ansvar.eu/law-pl/mcp"
     }
   }
 }
@@ -68,7 +68,7 @@ This MCP server makes Polish law **searchable, cross-referenceable, and AI-reada
   "github.copilot.chat.mcp.servers": {
     "polish-law": {
       "type": "http",
-      "url": "https://mcp.ansvar.eu/law-polish-law-mcp/mcp"
+      "url": "https://mcp.ansvar.eu/law-pl/mcp"
     }
   }
 }

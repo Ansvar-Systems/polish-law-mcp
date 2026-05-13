@@ -27,6 +27,7 @@ import Database from '@ansvar/mcp-sqlite';
 
 import { registerTools } from './tools/registry.js';
 import { detectCapabilities, readDbMetadata } from './capabilities.js';
+import { ensureReadableDb } from './database/ensure-readable-db.js';
 
 // Local type — avoids import from ./tools/about.js which may not exist in all repos.
 // The registerTools() `context` parameter is optional (`?`) so this is safe.
@@ -97,7 +98,7 @@ const sessions = new Map<string, StreamableHTTPServerTransport>();
 
 async function main() {
   const dbPath = resolveDbPath();
-  const db = new Database(dbPath, { readonly: true });
+  const db = new Database(ensureReadableDb(dbPath), { readonly: true });
   db.pragma('foreign_keys = ON');
 
   const caps = detectCapabilities(db);

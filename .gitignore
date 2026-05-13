@@ -9,3 +9,4 @@ coverage/
 data/source/
 .claude/
 .serena/
+.tmp-test-scratch*

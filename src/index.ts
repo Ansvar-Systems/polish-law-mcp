@@ -16,6 +16,7 @@ import { readFileSync } from 'fs';
 
 import { registerTools, type AboutContext } from './tools/registry.js';
 import { detectCapabilities, readDbMetadata } from './capabilities.js';
+import { ensureReadableDb } from './database/ensure-readable-db.js';
 import {
   DB_ENV_VAR,
   SERVER_NAME,
@@ -36,7 +37,7 @@ let db: InstanceType<typeof Database> | null = null;
 function getDb(): InstanceType<typeof Database> {
   if (!db) {
     const dbPath = resolveDbPath();
-    db = new Database(dbPath, { readonly: true });
+    db = new Database(ensureReadableDb(dbPath), { readonly: true });
     db.pragma('foreign_keys = ON');
 
     const caps = detectCapabilities(db);

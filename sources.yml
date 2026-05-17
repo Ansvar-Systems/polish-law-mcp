@@ -13,9 +13,12 @@ sources:
     update_frequency: "weekly"
     last_ingested: "PENDING_FIRST_INGEST"
     license_or_terms:
-      type: "Polish Government Open Data"
+      type: "PL-Statutory-PD"
+      ansvar_code: "PL-Statutory-PD"
+      statute_ref: "Prawo autorskie Art. 4"
       url: "https://isap.sejm.gov.pl"
-      summary: "Polish legislation published on ISAP is freely accessible; legal texts are public domain under Polish law (Art. 4 of the Copyright Act excludes legislative acts from copyright protection); ISAP provides structured access to all acts published in Dziennik Ustaw and Monitor Polski; no restrictions on reuse of legal text"
+      url_pattern: '^https?://(?:www\.)?isap\.sejm\.gov\.pl/.+'
+      summary: "Polish statutory-PD carve-out per Ustawa o prawie autorskim Art. 4 (NARROW). Art. 4 covers statutes, drafts, and administrative acts but does NOT enumerate court decisions. Case-law tier requires a separate basis (K.p.c. Art. 9 for civil judgments, K.p.k. Art. 100 for criminal judgments). This MCP currently ships the statute tier from ISAP under Art. 4. See infrastructure/attribution-licenses.json PL-Statutory-PD."
     coverage:
       scope: "All Polish legislation including Ustawa o ochronie danych osobowych z 2018 (Personal Data Protection Act 2018 - RODO implementing provisions), KSC (Ustawa o krajowym systemie cyberbezpieczenstwa 2018 - National Cybersecurity System Act, NIS implementation), KSH (Kodeks spolek handlowych - Commercial Companies Code), Kodeks karny (Criminal Code - cybercrime provisions Art. 267 ff.), Ustawa o swiadczeniu uslug droga elektroniczna (Act on Electronic Services), Prawo telekomunikacyjne (Telecommunications Law), Konstytucja RP, Kodeks cywilny, and all ustawy, rozporzadzenia, and obwieszczenia"
       limitations: "Historical versions prior to digitisation may be incomplete; no official English translations (some unofficial translations available); ISAP API has rate limiting; consolidated texts may lag behind latest Dziennik Ustaw publication; regional (voivodeship) legislation not covered"

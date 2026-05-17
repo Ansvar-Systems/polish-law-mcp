@@ -375,8 +375,34 @@ Apache License 2.0. See [LICENSE](./LICENSE) for details.
 
 ### Data Licenses
 
-- **Statutes & Legislation:** Kancelaria Sejmu RP (public domain -- Sejm ELI open data)
-- **EU Metadata:** EUR-Lex (EU public domain)
+Ansvar attribution code: **`PL-Statutory-PD`**. Basis: `Ustawa o prawie
+autorskim` Art. 4 — Polish statutory-PD carve-out for legislative and
+administrative acts.
+
+- **Statutes & Legislation:** Kancelaria Sejmu RP — ISAP. Public domain
+  under Art. 4 of the Polish Copyright Act, covering ustawy,
+  rozporządzenia, obwieszczenia, and other legislative/administrative
+  acts.
+- **EU Metadata:** EUR-Lex (EU public-domain notice).
+
+### Coverage scope (narrow carve-out)
+
+Art. 4 of the Polish Copyright Act is **NARROW** — it does not
+enumerate court decisions.
+
+- **IN-SCOPE under Art. 4:** statutes (`ustawy`), drafts, regulations
+  (`rozporządzenia`), administrative acts, official notices.
+- **OUT-OF-SCOPE under Art. 4:** court decisions. These require a
+  separate basis:
+  - Civil judgments: K.p.c. Art. 9 (Code of Civil Procedure).
+  - Criminal judgments: K.p.k. Art. 100 (Code of Criminal Procedure).
+- **Why this matters:** This MCP ships the statute tier from ISAP under
+  Art. 4. A case-law tier would require a separate licensing
+  declaration.
+
+See `docs/audits/2026-05-17-eu-copyright-statutory-works-batch-4-LV-LT-PL.md`
+in the Ansvar architecture-documentation repo for the verbatim Art. 4
+text and the coverage analysis.
 
 ---
 
